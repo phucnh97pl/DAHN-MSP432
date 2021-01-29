@@ -4,25 +4,19 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.3.LTS
+CG_TOOL_ROOT := C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./main_nortos.obj" \
-"./uartecho.obj" \
-"./syscfg/ti_drivers_config.obj" \
-"../MSP_EXP432P401R_NoRTOS.cmd" \
+"./main.obj" \
+"./startup_msp432p401r_ccs.obj" \
+"./system_msp432p401r.obj" \
+"../msp432p401r.cmd" \
 $(GEN_CMDS__FLAG) \
--l"ti/display/lib/display.aem4f" \
--l"ti/grlib/lib/ccs/m4f/grlib.a" \
--l"third_party/spiffs/lib/ccs/m4f/spiffs.a" \
--l"ti/drivers/lib/drivers_msp432p401x.aem4f" \
--l"third_party/fatfs/lib/ccs/m4f/fatfs.a" \
--l"lib/nortos_msp432p401x.aem4f" \
--l"ti/devices/msp432p4xx/driverlib/ccs/msp432p4xx_driverlib.lib" \
 -llibc.a \
+-l"D:/iot/libraries/msp432_driverlib_3_21_00_05/driverlib/MSP432P4xx/ccs/msp432p4xx_driverlib.lib" \
 
 -include ../makefile.init
 
@@ -129,43 +123,42 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-uartecho_MSP_EXP432P401R_nortos_ccs.out \
+LCD_msp432.out \
 
 EXE_OUTPUTS__QUOTED += \
-"uartecho_MSP_EXP432P401R_nortos_ccs.out" \
+"LCD_msp432.out" \
 
 BIN_OUTPUTS += \
-uartecho_MSP_EXP432P401R_nortos_ccs.hex \
+LCD_msp432.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"uartecho_MSP_EXP432P401R_nortos_ccs.hex" \
+"LCD_msp432.hex" \
 
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "uartecho_MSP_EXP432P401R_nortos_ccs.out"
+	@$(MAKE) --no-print-directory -Onone "LCD_msp432.out"
 
 # Tool invocations
-uartecho_MSP_EXP432P401R_nortos_ccs.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+LCD_msp432.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: ARM Linker'
-	"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.3.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432P401R_nortos_ccs.map" -i"C:/ti/simplelink_msp432p4_sdk_3_40_01_02/source" -i"C:/ti/simplelink_msp432p4_sdk_3_40_01_02/kernel/nortos" -i"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.3.LTS/lib" --diag_suppress=10063 --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432P401R_nortos_ccs_linkInfo.xml" --entry_point=resetISR --rom_model -o "uartecho_MSP_EXP432P401R_nortos_ccs.out" $(ORDERED_OBJS)
+	"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=all --define=__MSP432P401R__ --define=ccs -g --gcc --diag_warning=225 --diag_wrap=off --display_error_number --abi=eabi -z -m"LCD_msp432.map" --heap_size=1024 --stack_size=512 -i"D:/iot/libraries/msp432_driverlib_3_21_00_05/driverlib/MSP432P4xx" -i"D:/iot/libraries/msp432_driverlib_3_21_00_05/inc" -i"C:/ti/ccs1011/ccs/ccs_base/arm/include" -i"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/lib" -i"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="LCD_msp432_linkInfo.xml" --rom_model -o "LCD_msp432.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-uartecho_MSP_EXP432P401R_nortos_ccs.hex: $(EXE_OUTPUTS)
+LCD_msp432.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: ARM Hex Utility'
-	"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.3.LTS/bin/armhex"  -o "uartecho_MSP_EXP432P401R_nortos_ccs.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/bin/armhex" --memwidth=8 --romwidth=8 -o "LCD_msp432.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(GEN_MISC_FILES__QUOTED)$(BIN_OUTPUTS__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main_nortos.obj" "uartecho.obj" "syscfg\ti_drivers_config.obj" 
-	-$(RM) "main_nortos.d" "uartecho.d" "syscfg\ti_drivers_config.d" 
-	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
+	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
+	-$(RM) "main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
+	-$(RM) "main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
